@@ -1,36 +1,77 @@
-import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+let initialPlayer = 0;
+let initialStatus = {
+  11: 0, 12: 0, 13: 0,
+  21: 0, 22: 0, 23: 0,
+  31: 0, 32: 0, 33: 0
+};
 
 function App() {
+  const [player, setPlayer] = useState(initialPlayer);
+  const [status, setStatus] = useState(initialStatus);
+  const [finished, setFinished] = useState(false);
 
-  const [player, setPlayer] = useState(0);
-  
-  const [status, setStatus] = useState(
-    {
-      1_1: 0, 1_2: 0, 1_3: 0,
-      2_1: 0, 2_2: 0, 2_3: 0,
-      3_1: 0, 3_2: 0, 3_3: 0
-    }
-  )
+  useEffect(() => {
+    initialPlayer = player;
+    initialStatus = status;
+  },[])
+
+  useEffect(() => {
+    checkVictory();
+  },[status])
+
+  const restart = () => {
+    setPlayer(initialPlayer);
+    setStatus(initialStatus);
+    setFinished(false);
+  }
 
   const player_turn = () => {
     if (!player) return 1
     return player === 1 ? 2 :  1 
   }
 
+  const isDiagonalVictory = () => {
+    if(status[11] && status[11] == status[22] && status[22] == status[33]) {
+      return true;
+    }
+    if(status[13] && status[13] == status[22] && status[22] == status[31]) {
+      return true;
+    }
+    return false;
+  }
+
+  const isLineVictory = () => {
+    for(let i=1; i<=3; i++) { 
+      if(status[`${i}${1}`] && status[`${i}${1}`] == status[`${i}${2}`] && status[`${i}${2}`] == status[`${i}${3}`]) {
+        return true;
+      }
+      if(status[`${1}${i}`] && status[`${1}${i}`] == status[`${2}${i}`] && status[`${2}${i}`] == status[`${3}${i}`]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const checkVictory = () => {
+    if(isDiagonalVictory() || isLineVictory()) {
+      window.alert(`Victory of Player ${player}`);
+      setFinished(true);
+    }
+  }
+
   const handleClick = (pos) => {
     if(status[pos]) return;
+    if(finished) return;
     setPlayer(player_turn())
     setStatus({...status, [pos]: player_turn()})
   }
 
   const cell = (i, j) => {
-
-    const pos = `${i}_${j}`;
+    const pos = `${i}${j}`;
     const player_class = `pressed-player-` + status[pos];
-
-    console.log('player class', player_class)
     return <div key={j} onClick={() => handleClick(pos)} className={`col ${player_class}`}>{i}x{j} Player: {status[pos]}</div>
   }
 
@@ -50,6 +91,7 @@ function App() {
 
         ))
       }
+      <button onClick={restart}>Restart</button>
     </div>
   );
 }
