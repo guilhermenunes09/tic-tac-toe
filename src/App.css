@@ -31,6 +31,10 @@ body {
   background-color: aquamarine;
 }
 
-.pressed {
+.pressed-player-1 {
   background-color: aqua;
+}
+
+.pressed-player-2 {
+  background-color:cornflowerblue;
 }
