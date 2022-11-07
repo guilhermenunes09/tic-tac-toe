@@ -7,25 +7,24 @@ let initialStatus = {
   21: 0, 22: 0, 23: 0,
   31: 0, 32: 0, 33: 0
 };
+let initialSpotsLeft = 9;
 
 function App() {
   const [player, setPlayer] = useState(initialPlayer);
   const [status, setStatus] = useState(initialStatus);
+  const [spotsLeft, setSpotsLeft] = useState(initialSpotsLeft);
   const [finished, setFinished] = useState(false);
 
   useEffect(() => {
-    initialPlayer = player;
-    initialStatus = status;
-  },[])
-
-  useEffect(() => {
     checkVictory();
+    checkDraw();
   },[status])
 
   const restart = () => {
     setPlayer(initialPlayer);
     setStatus(initialStatus);
     setFinished(false);
+    setSpotsLeft(initialSpotsLeft);
   }
 
   const player_turn = () => {
@@ -55,9 +54,23 @@ function App() {
     return false;
   }
 
+  const isDraw = () => {
+    if(spotsLeft == 0 && finished == false) {
+      return true;
+    }
+    return false;
+  }
+
   const checkVictory = () => {
     if(isDiagonalVictory() || isLineVictory()) {
       window.alert(`Victory of Player ${player}`);
+      setFinished(true);
+    }
+  }
+
+  const checkDraw = () => {
+    if(isDraw()) {
+      window.alert(`Draw!`);
       setFinished(true);
     }
   }
@@ -66,7 +79,8 @@ function App() {
     if(status[pos]) return;
     if(finished) return;
     setPlayer(player_turn())
-    setStatus({...status, [pos]: player_turn()})
+    setStatus({...status, [pos]: player_turn()});
+    setSpotsLeft(spotsLeft - 1);
   }
 
   const cell = (i, j) => {
@@ -78,7 +92,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header"></header>
-      Player: {player}
+      Player: {player}<br></br>
+      Spots Left: {spotsLeft}
       {
         [1,2,3].map(i => (
           <div key={i} className='row'> 
