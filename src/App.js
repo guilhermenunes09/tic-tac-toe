@@ -14,6 +14,8 @@ function App() {
   const [status, setStatus] = useState(initialStatus);
   const [spotsLeft, setSpotsLeft] = useState(initialSpotsLeft);
   const [finished, setFinished] = useState(false);
+  const [draw, setDraw] = useState(false);
+  const [playerVictory, setPlayerVictory] = useState(0);
 
   useEffect(() => {
     checkVictory();
@@ -25,6 +27,8 @@ function App() {
     setStatus(initialStatus);
     setFinished(false);
     setSpotsLeft(initialSpotsLeft);
+    setPlayerVictory(0);
+    setDraw(false);
   }
 
   const player_turn = () => {
@@ -56,6 +60,7 @@ function App() {
 
   const isDraw = () => {
     if(spotsLeft == 0 && finished == false) {
+      setDraw(true);
       return true;
     }
     return false;
@@ -63,20 +68,13 @@ function App() {
 
   const checkVictory = () => {
     if(isDiagonalVictory() || isLineVictory()) {
-
-      setTimeout(() => {
-        window.alert(`Victory of Player ${player}`)
-      }, 400);
-      
       setFinished(true);
+      setPlayerVictory(player);
     }
   }
 
   const checkDraw = () => {
     if(isDraw()) {
-      setTimeout(() => {
-        window.alert(`Draw!`)
-      }, 400);
       setFinished(true);
     }
   }
@@ -103,23 +101,41 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header"></header>
-      Player: {player}<br></br>
-      Spots Left: {spotsLeft}
-      {
-        [1,2,3].map(i => (
-          <div key={i} className='row'> 
-            {
-              [1,2,3].map(j => (
-                cell(i,j)
-              ))
-            }
-          </div>
+      <header className="App-header">
+        <h1 className='main-title'>Tic Tac Toe</h1>
 
-        ))
-      }
-      <button onClick={restart}>Restart</button>
+      </header>
+      <div className='content'>
+        <div style={{marginBottom: '20px'}}>Turn: Player {player == 1 ? '2' : '1'}</div>
+        {
+          [1,2,3].map(i => (
+            <div key={i} className='row'> 
+              {
+                [1,2,3].map(j => (
+                  cell(i,j)
+                ))
+              }
+            </div>
+
+          ))
+        }
+        { finished && 
+          <button className='restart-button' onClick={restart}>Play Again</button>
+        }
+      </div>
+      <footer>
+        <div className='footer-content'>
+          { playerVictory !==0 && 
+            <>
+              <div>Player {playerVictory} won!</div>
+              <div className='congrats'>Congrats!</div>
+            </>
+          }
+          { draw && <div>Draw!</div> }
+        </div>
+      </footer>
     </div>
+    
   );
 }
 
