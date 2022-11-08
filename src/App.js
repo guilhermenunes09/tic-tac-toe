@@ -63,14 +63,20 @@ function App() {
 
   const checkVictory = () => {
     if(isDiagonalVictory() || isLineVictory()) {
-      window.alert(`Victory of Player ${player}`);
+
+      setTimeout(() => {
+        window.alert(`Victory of Player ${player}`)
+      }, 400);
+      
       setFinished(true);
     }
   }
 
   const checkDraw = () => {
     if(isDraw()) {
-      window.alert(`Draw!`);
+      setTimeout(() => {
+        window.alert(`Draw!`)
+      }, 400);
       setFinished(true);
     }
   }
@@ -86,7 +92,13 @@ function App() {
   const cell = (i, j) => {
     const pos = `${i}${j}`;
     const player_class = `pressed-player-` + status[pos];
-    return <div key={j} onClick={() => handleClick(pos)} className={`col ${player_class}`}>{i}x{j} Player: {status[pos]}</div>
+    return (
+      <div key={j} onClick={() => handleClick(pos)} className={`col ${player_class}`}>
+        <div className={status[pos] === 1 ? `mark-cross-45` : `initial-cross`}/>
+        <div className={status[pos] === 1 ? `mark-cross-85` : `initial-cross`}/>
+        <div className={status[pos] === 2 ? `mark-circle` : `mark-circle-initial`}/>
+      </div>
+    )
   }
 
   return (

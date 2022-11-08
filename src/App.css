@@ -19,12 +19,14 @@ body {
   flex-direction: column;
   height: 8rem;
   width: 8rem;
-  background-color: green;
-  margin:.2em;
+  background-color: rgb(206, 211, 213);
+  margin:.1em;
   align-self: center;
   cursor: pointer;
   text-align: center;
   vertical-align: middle;
+  position: relative;
+  border-radius: 3px;
 }
 
 .col:hover {
@@ -32,9 +34,56 @@ body {
 }
 
 .pressed-player-1 {
-  background-color: aqua;
+  background-color: rgb(176, 250, 250);
 }
 
 .pressed-player-2 {
-  background-color:cornflowerblue;
+  background-color:rgb(184, 204, 242);
 }
+
+.initial-cross {
+  width: 0px;
+}
+
+.mark-cross-45 {
+  position: absolute;
+  width: 100px;
+  height: 10px;
+  background-color: rgb(255, 76, 11);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: 20%;
+  transition: width 1s;
+}
+
+.mark-cross-85 {
+  position: absolute;
+  width: 100px;
+  height: 10px;
+  background-color: rgb(255, 76, 11);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(135deg);
+  border-radius: 20%;
+  transition: width 1s;
+}
+
+.mark-circle-initial {
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.mark-circle {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+
+  background-color: transparent;
+  border: 7px solid rgb(0, 179, 255);
+  border-radius: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 1s;
+}
+
